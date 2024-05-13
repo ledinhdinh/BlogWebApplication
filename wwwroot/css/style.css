@@ -376,7 +376,6 @@ header .btn-group {
 
 .blog .h2 {
     line-height: 1.3;
-    margin-bottom: 3rem;
     text-align: center;
 }
 
@@ -713,6 +712,39 @@ footer {
                 color: var(--accent);
             }
 
+    .nav-link-dropdown {
+        display: none;
+        font-weight: 500;
+        position: absolute;
+        background: var(--action-primary);
+        min-width: 150px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 10;
+        border-radius: 10px;
+        padding: 0;
+    }
+
+    .desktop-nav li:nth-child(2):hover .nav-link-dropdown {
+        display: block;
+    }
+
+    .nav-link-dropdown li {
+        padding: 0.5rem 1rem 0.5rem 1rem;
+    }
+
+        .nav-link-dropdown li a {
+            color: var(--foreground-secondary);
+        }
+
+            .nav-link-dropdown li a:hover {
+                /*    background: var(--accent);*/
+                border-left: 4px solid var(--accent);
+                color: var(--white);
+                width: 100%;
+                padding-left: 6px;
+                transition: all 0.3s ease;
+            }
+
     .theme-btn-desktop {
         position: relative;
         background: var(--background-secondary);
@@ -757,6 +789,8 @@ footer {
     .hero {
         text-align: left;
         background-image: url(../Content/Images/background-hero2.jpg);
+        width: 100%;
+        height: 580px;
         background-size: 100%;
     }
 
@@ -840,7 +874,6 @@ footer {
 
         .aside .h2 {
             color: var(--foreground-secondary);
-            margin-bottom: 3rem;
             text-align: center;
             line-height: 1.3;
         }
@@ -851,6 +884,19 @@ footer {
             padding: 40px;
             box-shadow: 0 5px 5px hsla(0, 0%, 05, 0.05);
         }
+
+    .blog .add-new {
+        display: flex;
+        justify-content: end;
+    }
+
+    .add-new button {
+        display: flex;
+        font-size: 17px;
+        font-weight: 500;
+        align-items: center;
+        justify-content: space-evenly;
+    }
 
     .topics {
         margin-bottom: 3rem;

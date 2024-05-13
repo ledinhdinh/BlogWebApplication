@@ -30,3 +30,28 @@ for (let i = 0; i < themeBtn.length; i++) {
         }
     })
 }
+
+/*
+[13/05/2024] - Create - Display image when upload.
+*/
+function displayImage(result) {
+    if (result.files && result.files[0]) {
+        var fileReader = new FileReader;
+        fileReader.onload = function (e) {
+            $("#previewImage").attr('src', e.target.result);
+        }
+        fileReader.readAsDataURL(result.files[0]);
+    }
+}
+
+function resetValue() {
+    $('#Image').val("");
+    var image = document.getElementById("previewImage");
+    image.removeAttribute("src");
+    $("#BlogName").val("");
+    $("#Author").val("");
+    $("#CategoryID").val("");
+    $("#ReadingTime").val("");
+    $("#BlogDescription").val("");
+    $("#Link").val("");
+}

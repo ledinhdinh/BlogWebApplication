@@ -24,12 +24,16 @@ namespace BlogWebApplication.Migrations
 
             modelBuilder.Entity("BlogWebApplication.Models.Blog", b =>
                 {
-                    b.Property<string>("BlogID")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("BlogID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BlogID"));
 
                     b.Property<string>("Author")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("BlogDescription")
                         .IsRequired()
@@ -37,7 +41,8 @@ namespace BlogWebApplication.Migrations
 
                     b.Property<string>("BlogName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("CategoryID")
                         .IsRequired()
@@ -59,11 +64,31 @@ namespace BlogWebApplication.Migrations
 
                     b.Property<string>("ReadingTime")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("BlogID");
 
                     b.ToTable("BlogWebs");
+                });
+
+            modelBuilder.Entity("BlogWebApplication.Models.Category", b =>
+                {
+                    b.Property<string>("CategoryID")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("CategoryID");
+
+                    b.ToTable("Categorys");
                 });
 #pragma warning restore 612, 618
         }
