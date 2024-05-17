@@ -9,5 +9,6 @@ namespace BlogWebApplication.Services
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
         public DbSet<Blog> BlogWebs { get; set; }
         public DbSet<Category> Categorys { get; set; }
+		public DbSet<Menu> Menus { get; set; }
     }
 }

@@ -2,47 +2,26 @@
 @{
 	ViewData["Title"] = "Home";
 }
-
-<script type="text/javascript">
-	// $(document).ready(function () {
-	// 	// addNew();
-	// });
-
-	/**
-	 * [12/05/2024] - Create.
-	 */
-	// function addNew() {
-	// 	var listBlog = {
-	// 		BlogName: $('#BlogName').val(),
-	// 		BlogDescription: $('#BlogDescription').val(),
-	// 		ReadingTime: $('#ReadingTime').val(),
-	// 		Author: $('#Author').val(),
-	// 		Link: $('#Link').val(),
-	// 		// Image: $('#Image').val(),
-	// 		CategoryID: $('#CategoryID').val()
-	// 	}
-	// 	$.ajax({
-	// 		url: "/BlogWebs/AddNewBlog",
-	// 		type: "POST",
-	// 		data: JSON.stringify(listBlog),
-	// 		contentType: "application/xxx-www-form-urlencoded;charset=utf-8",
-	// 		dataType: "json",
-	// 		success: function (result) {
-	// 			alert(1);
-	// 		},
-	// 		error: function (errormessage) {
-	// 			alert(2);
-	// 		}
-	// 	});
-	// }
-</script>
-
+@* Load body of Home View
+	[06/05/2024] - Updated - Move class="img-box" to div tag.
+	[13/05/2024] - Updated - Hide temporary background.
+	[15/05/2024] - Updated - Move information to the right.
+*@
 <div class="hero">
 	<div class="container">
 		<div class="left">
+			@* 			<div class="pattern-bg"></div>
+			<div class="img-box">
+			<img src="~/Content/Images/hero.png" alt="Dinh Dinh Image" class="hero-img">
+			<div class="shape shape-1"></div>
+			<div class="shape shape-2"></div>
+			</div> *@
+		</div>
+
+		<div class="right">
 			<h1 class="h1">
 				Xin chào, <b>Lê&nbsp;Đình&nbsp;Định</b>.
-				<br>.NET Developer
+				@* 		<br>.NET Developer *@
 			</h1>
 
 			<p class="h3">
@@ -54,18 +33,6 @@
 				<a class="btn btn-secondary">About me</a>
 			</div>
 		</div>
-
-		<!-- [06/05/2024] - Updated - Move class="img-box" to div tag.
-			 [13/05/2024] - Updated - Hide temporary background.
-		-->
-		@* <div class="right">
-		<div class="pattern-bg"></div>
-		<div class="img-box">
-		<img src="~/Content/Images/hero.png" alt="Dinh Dinh Image" class="hero-img">
-		<div class="shape shape-1"></div>
-		<div class="shape shape-2"></div>
-		</div>
-		</div> *@
 	</div>
 </div>
 
@@ -76,10 +43,10 @@
 			<!--[11/05/2024] - Updated - Add button add new.-->
 			<div class="row mb-3">
 				<div class="col">
-					<h2 class="h2">Latest Blog Post</h2>
+					<h2 class="h2">Bài viết mới post</h2>
 				</div>
 				<div class="col">
-					@using (Html.BeginForm("AddNewBlog", "BlogWebs", FormMethod.Post ,new { enctype = "multipart/form-data" }))
+					@using (Html.BeginForm("AddNewBlog", "BlogWebs", FormMethod.Post, new { enctype = "multipart/form-data" }))
 					{
 						<div class="add-new">
 							<!-- Button trigger modal -->
@@ -173,11 +140,12 @@
 
 												<div class="row mb-3">
 													@* Mô tả *@
+													@* [14/05/2024] - Updated - Add style editor. *@
 													<div class="col-md-12">
 														<div class="row">
 															<label class="col-sm-2 col-form-label">Mô tả </label>
 															<div class="col-sm-10">
-																<textarea class="form-control" asp-for="BlogDescription" rows="10"></textarea>
+																<textarea id="editor" class="form-control" asp-for="BlogDescription"></textarea>
 															</div>
 														</div>
 													</div>
@@ -198,172 +166,9 @@
 				</div>
 			</div>
 
+			@* Load new blog *@
 			<div class="blog-card-group">
-				<div class="blog-card">
-					<div class="blog-card-banner">
-						<img src="~/Content/Images/blog-1.png"
-							 alt="Building microservices with Dropwizard, MongoDB & Docker" width="250"
-							 class="blog-banner-img">
-					</div>
-
-					<div class="blog-content-wrapper">
-						<button class="blog-topic text-tiny">
-							Databases
-						</button>
-
-						<h3>
-							<a href="#" class="h3">Building microservices with Dropwizard, MongoDB & Docker</a>
-						</h3>
-
-						<p class="blog-text">
-							This NoSQL database oriented to documents (by documents like JSON) combines
-							some of the features from relational databases, easy to use and the
-							multi-platform is the best option for scale up and have fault tolerance, load
-							balancing, map reduce, etc.
-						</p>
-						<div class="wrapper-flex">
-							<div class="profile-wrapper">
-								<img src="~/Content/Images/author.png" alt="DinhDinh" width="50">
-							</div>
-						</div>
-
-						<div class="wrapper">
-							<a href="#" class="h4">Julia Walker</a>
-
-							<p class="text-sm">
-								<time datetime="2022-01-17">Jan 17, 2022</time>
-								<span class="separator"></span>
-								<ion-icon name="time-outline"></ion-icon>
-								<time datetime="PT3M">3 min</time>
-							</p>
-						</div>
-
-					</div>
-				</div>
-
-				<div class="blog-card">
-					<div class="blog-card-banner">
-						<img src="~/Content/Images/blog-2.png" alt="Fast web page loading on a $20 feature phone"
-							 width="250" class="blog-banner-img">
-					</div>
-
-					<div class="blog-content-wrapper">
-						<button class="blog-topic text-tiny">
-							Web Performance
-						</button>
-
-						<h3>
-							<a href="#" class="h3">Fast web page loading on a $20 feature phone</a>
-						</h3>
-
-						<p class="blog-text">
-							Feature phones are affordable (under $20-25), low-end devices enabling
-							100s of millions of users in developing countries to leverage the web.
-							Think of them as a light version of a smart phone.
-						</p>
-						<div class="wrapper-flex">
-							<div class="profile-wrapper">
-								<img src="~/Content/Images/author.png" alt="DinhDinh" width="50">
-							</div>
-						</div>
-
-						<div class="wrapper">
-							<a href="#" class="h4">Julia Walker</a>
-
-							<p class="text-sm">
-								<time datetime="2022-12-10">Dec 10, 2021</time>
-								<span class="separator"></span>
-								<ion-icon name="time-outline"></ion-icon>
-								<time datetime="PT2M">2 min</time>
-							</p>
-						</div>
-
-					</div>
-				</div>
-
-				<div class="blog-card">
-					<div class="blog-card-banner">
-						<img src="~/Content/Images/blog-3.png" alt="Accessibility Tips for Web Developers"
-							 width="250" class="blog-banner-img">
-					</div>
-
-					<div class="blog-content-wrapper">
-						<button class="blog-topic text-tiny">
-							Accessibility
-						</button>
-
-						<h3>
-							<a href="#" class="h3">Accessibility Tips for Web Developers</a>
-						</h3>
-
-						<p class="blog-text">
-							It's awesome to build sites that are inclusive and accessible to everyone.
-							There are at least six key areas of disability we can optimize for: visual,
-							hearing, mobility, cognition, speech and neural. Many tools and
-							resources can help here, even if you're totally new to web accessibility.
-						</p>
-						<div class="wrapper-flex">
-							<div class="profile-wrapper">
-								<img src="~/Content/Images/author.png" alt="DinhDinh" width="50">
-							</div>
-						</div>
-
-						<div class="wrapper">
-							<a href="#" class="h4">Julia Walker</a>
-
-							<p class="text-sm">
-								<time datetime="2021-11-28">Nov 28, 2021</time>
-								<span class="separator"></span>
-								<ion-icon name="time-outline"></ion-icon>
-								<time datetime="PT4M">4 min</time>
-							</p>
-						</div>
-
-					</div>
-				</div>
-
-				<div class="blog-card">
-					<div class="blog-card-banner">
-						<img src="~/Content/Images/blog-4.png"
-							 alt="Dynamically Securing Databases using Hashicorp Vault" width="250"
-							 class="blog-banner-img">
-					</div>
-
-					<div class="blog-content-wrapper">
-						<button class="blog-topic text-tiny">
-							Database
-						</button>
-
-						<h3>
-							<a href="#" class="h3">Dynamically Securing Databases using Hashicorp Vault</a>
-						</h3>
-
-						<p class="blog-text">
-							Nowadays, it's hard to profoundly talk about security in the IT industry,
-							since it has to be considered on so many different levels: from securing code
-							chunks,
-							securing containers, up to securing complex infrastructures and defining
-							strong authorization and authentication policies across the enterprise.
-						</p>
-						<div class="wrapper-flex">
-							<div class="profile-wrapper">
-								<img src="~/Content/Images/author.png" alt="DinhDinh" width="50">
-							</div>
-						</div>
-
-						<div class="wrapper">
-							<a href="#" class="h4">Julia Walker</a>
-
-							<p class="text-sm">
-								<time datetime="2021-11-28">Nov 20, 2021</time>
-								<span class="separator"></span>
-								<ion-icon name="time-outline"></ion-icon>
-								<time datetime="PT4M">4 min</time>
-							</p>
-						</div>
-
-					</div>
-				</div>
+				<div id="loadBlog"></div>
 			</div>
 
 			<button class="btn load-more">Load More</button>

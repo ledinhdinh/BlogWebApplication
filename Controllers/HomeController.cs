@@ -16,18 +16,22 @@ namespace BlogWebApplication.Controllers
 			this._context = context;
 		}
 
-		public IActionResult Index()
+		/// <summary>
+		///		Get data for drop down category.
+		/// </summary>
+		/// <returns></returns>
+		/// <history>
+		///		[13/05/2024] - Updated - Lấy dữ liệu CategoryID lên đổ vào combobox add modal.
+		/// </history>
+		public IActionResult ViewIndex()
 		{
-			//var categoryList = _context.Categorys.OrderBy(x => x.Type).ToList();
-			// [13/05/2024] - Update - Lấy dữ liệu CategoryID lên đổ vào combobox.
 			var category = new BlogViewModel();
-			category.listCategory = (from obj in _context.Categorys
+			category.listCategory = (from objCategory in _context.Categorys
 									 select new SelectListItem()
 									 {
-										 Text = obj.CategoryName,
-										 Value = obj.CategoryID.ToString()
+										 Text = objCategory.CategoryName,
+										 Value = objCategory.CategoryID.ToString()
 									 }).ToList();
-
 			return View(category);
 		}
 

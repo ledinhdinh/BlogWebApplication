@@ -90,6 +90,42 @@ namespace BlogWebApplication.Migrations
 
                     b.ToTable("Categorys");
                 });
+
+            modelBuilder.Entity("BlogWebApplication.Models.Menu", b =>
+                {
+                    b.Property<int>("MenuID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MenuID"));
+
+                    b.Property<string>("Controller")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("MenuChildIndex")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MenuChildName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MenuLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MenuParentIndex")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MenuParentName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("MenuID");
+
+                    b.ToTable("Menus");
+                });
 #pragma warning restore 612, 618
         }
     }

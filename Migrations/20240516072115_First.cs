@@ -44,6 +44,24 @@ namespace BlogWebApplication.Migrations
                 {
                     table.PrimaryKey("PK_Categorys", x => x.CategoryID);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Menus",
+                columns: table => new
+                {
+                    MenuID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MenuParentName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    MenuParentIndex = table.Column<int>(type: "int", nullable: false),
+                    Controller = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    MenuLevel = table.Column<int>(type: "int", nullable: false),
+                    MenuChildName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MenuChildIndex = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Menus", x => x.MenuID);
+                });
         }
 
         /// <inheritdoc />
@@ -54,6 +72,9 @@ namespace BlogWebApplication.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categorys");
+
+            migrationBuilder.DropTable(
+                name: "Menus");
         }
     }
 }

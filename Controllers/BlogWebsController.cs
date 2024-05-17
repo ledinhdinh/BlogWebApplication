@@ -2,23 +2,48 @@
 using BlogWebApplication.Services;
 using BlogWebApplication.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace BlogWebApplication.Controllers
 {
 	public class BlogWebsController : Controller
 	{
-		private readonly ApplicationDbContext context;
-		private readonly IWebHostEnvironment environment;
+		private readonly ApplicationDbContext _context;
+		private readonly IWebHostEnvironment _environment;
 
 		public BlogWebsController(ApplicationDbContext context, IWebHostEnvironment environment)
 		{
-			this.context = context;
-			this.environment = environment;
+			this._context = context;
+			this._environment = environment;
 		}
-		public IActionResult Index()
+
+		/// <summary>
+		///		Get detail data and return partial view.
+		/// </summary>
+		/// <returns></returns>
+		/// <history>
+		///		[14/05/2024] - Create  - Get data for view detail.
+		///		[15/05/2024] - Updated - Change way get data to get image null.
+		/// </history>
+		[HttpGet]
+		public PartialViewResult GetBlog(BlogViewModel blogViewModel)
 		{
-			var blogs = context.BlogWebs.ToList();
-			return View(blogs);
+			IEnumerable<Blog> listObjectBlog = (from objectBlog in _context.BlogWebs
+												select new Blog()
+												{
+													BlogName = objectBlog.BlogName,
+													BlogDescription = objectBlog.BlogDescription,
+													ReadingTime = objectBlog.ReadingTime,
+													Image = string.IsNullOrEmpty(objectBlog.Image) ? null : objectBlog.Image,
+													CategoryID = objectBlog.CategoryID,
+													Link = string.IsNullOrEmpty(objectBlog.Link) ? null : objectBlog.Link,
+													Author = string.IsNullOrEmpty(objectBlog.Author) ? null : objectBlog.Author,
+													CreateDate = objectBlog.CreateDate,
+												}).ToList();
+			return PartialView("_PartialDisplayBlog", listObjectBlog);
 		}
 
 		/// <summary>
@@ -32,23 +57,20 @@ namespace BlogWebApplication.Controllers
 		[HttpPost]
 		public ActionResult AddNewBlog(BlogViewModel blogViewModel)
 		{
-			if (blogViewModel.Image == null)
-			{
-				ModelState.AddModelError("ImageFile", "Thiếu file ảnh");
-			}
-			//if (!ModelState.IsValid)
-			//{
-			//	return View(blogViewModel);
-			//}
-
 			// save image file.
 			string newFileName = DateTime.Now.ToString("yyyyMMddmmmssfff");
-			newFileName += Path.GetExtension(blogViewModel.Image!.FileName);
-
-			string imgFullPath = environment.WebRootPath + "/images/" + newFileName;
-			using (var stream = System.IO.File.Create(imgFullPath))
+			if (blogViewModel.Image != null)
 			{
-				blogViewModel.Image.CopyTo(stream);
+				newFileName += Path.GetExtension(blogViewModel.Image.FileName);
+				string imgFullPath = _environment.WebRootPath + "/images/" + newFileName;
+				using (var stream = System.IO.File.Create(imgFullPath))
+				{
+					blogViewModel.Image.CopyTo(stream);
+				}
+			}
+			else
+			{
+				newFileName = null;
 			}
 
 			Blog objectBlog = new Blog()
@@ -64,11 +86,16 @@ namespace BlogWebApplication.Controllers
 				Image = newFileName,
 			};
 
-			context.BlogWebs.Add(objectBlog);
-			context.SaveChanges();
+			_context.BlogWebs.Add(objectBlog);
+			_context.SaveChanges();
 
 			//return Json(objectBlog);
-			return RedirectToAction("Index", "Home");
+			return RedirectToAction("ViewHome", "Home");
+		}
+
+		public IActionResult ViewIndex()
+		{
+			return View();
 		}
 	}
 }

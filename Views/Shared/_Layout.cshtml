@@ -29,68 +29,13 @@
 						<ion-icon name="menu-outline"></ion-icon>
 					</button>
 				</div>
-
+				<!--
+					 [06/05/2024] - Updated - Translate menu from English to Vietnammese.
+					 [10/05/2024] - Updated - Add dropdown menu category.
+					 [15/05/2024] - Updated - Use partial view render menu.
+				-->
 				<div class="flex-wrapper">
-					<!--
-						 [06/05/2024] - Updated - Translate menu from English to Vietnammese.
-						 [10/05/2024] - Updated - Add dropdown menu category.
-					-->
-					<ul class="desktop-nav">
-						<li>
-							<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>
-						</li>
-						<li>
-							<a class="nav-link">Danh mục &dtrif;</a>
-							<ul class="nav-link-dropdown">
-								@* 		@foreach (var itemCategory in Model)
-								{
-								@if (@itemCategory.Type == 1)
-								{
-								<li>
-								<a asp-area="" asp-controller="Sql" asp-action="Index">@itemCategory.CategoryName</a>
-								</li>
-								}
-								else if (@itemCategory.Type == 2)
-								{
-								<li>
-								<a asp-area="" asp-controller="Git" asp-action="Index">@itemCategory.CategoryName</a>
-								</li>
-								}
-								else if (@itemCategory.Type == 3)
-								{
-								<li>
-								<a asp-area="" asp-controller="Cv" asp-action="Index">@itemCategory.CategoryName</a>
-								</li>
-								}
-								else if (@itemCategory.Type == 4)
-								{
-								<li>
-								<a asp-area="" asp-controller="Net" asp-action="Index">@itemCategory.CategoryName</a>
-								</li>
-								}
-								else if (@itemCategory.Type == 5)
-								{
-								<li>
-								<a asp-area="" asp-controller="Eng" asp-action="Index">@itemCategory.CategoryName</a>
-								</li>
-								}
-								else
-								{
-								<li>
-								<a asp-area="" asp-controller="Inv" asp-action="Index">@itemCategory.CategoryName</a>
-								</li>
-								}
-								} *@
-							</ul>
-						</li>
-						<li>
-							<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Liên hệ</a>
-						</li>
-					</ul>
-					<button class="theme-btn theme-btn-desktop light">
-						<ion-icon class="moon" name="moon"></ion-icon>
-						<ion-icon name="sunny" class="sun"> </ion-icon>
-					</button>
+					@await Component.InvokeAsync("Menu")
 				</div>
 
 				<div class="mobile-nav">
@@ -143,13 +88,15 @@
 	</footer>
 
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	@* 	<script src="~/js/ckeditor/build/ckeditor.js"></script> *@
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	@* <script src="~/js/site.js" asp-append-version="true"></script> *@
 	<!-- ionicon link-->
 	<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 	<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	@* <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> *@
 	<!--Custom js link-->
+	<script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/super-build/ckeditor.js"></script>
 	<script src="~/js/script.js"></script>
 	@await RenderSectionAsync("Scripts", required: false)
 </body>

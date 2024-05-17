@@ -1,0 +1,54 @@
+﻿@model List<Blog>
+
+@foreach (var itemBlog in Model)
+{
+	<div class="blog-card">
+		<div class="blog-card-banner">
+			@if (@itemBlog.Image == null)
+			{
+				<img src="/images/default_imageblog.jpg"
+					 alt="Image-BlogTitle" width="250px"
+					 class="blog-banner-img">
+			}
+			else
+			{
+				<img src="/images/@itemBlog.Image"
+					 alt="Image-BlogTitle" width="250px"
+					 class="blog-banner-img">
+			}
+		</div>
+
+		<div class="blog-content-wrapper">
+			<button class="blog-topic text-tiny">
+				@itemBlog.CategoryID
+			</button>
+
+			<h3>
+				<a asp-action="ViewDetail" asp-controller="BlogWebs" class="h3">@itemBlog.BlogName</a>
+			</h3>
+
+			<p class="blog-text">
+				<i>
+					Link: <a href="">@itemBlog.Link</a>
+				</i>
+			</p>
+
+			<div class="wrapper-flex">
+				<div class="profile-wrapper">
+					<img src="~/Content/Images/author_default.jpg" alt="DinhDinh" width="50">
+				</div>
+			</div>
+
+			<div class="wrapper">
+				<a href="#" class="h4">@itemBlog.Author</a>
+
+				<p class="text-sm">
+					<time datetime="2022-01-17">@itemBlog.CreateDate.ToString("dd/MM/yyyy")</time>
+					<span class="separator"></span>
+					<ion-icon name="time-outline"></ion-icon>
+					<time datetime="PT3M">@itemBlog.ReadingTime min</time>
+				</p>
+			</div>
+		</div>
+	</div>
+}

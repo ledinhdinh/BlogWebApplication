@@ -363,7 +363,7 @@ header .btn-group {
         text-align: center;
     }
 
-    .hero .right {
+    .hero .left {
         display: none;
     }
 
@@ -671,10 +671,12 @@ footer {
     /* REUSED STYLE */
     .container {
         max-width: 800px;
-    }
+    }B
 }
 
-/* Responsive for larger than 1024px screen */
+/* Responsive for larger than 1024px screen 
+    [17/05/2024] - Updated - Edit style drop down menu.
+*/
 @media(min-width:1024px) {
     :root {
         /* typography */
@@ -703,47 +705,26 @@ footer {
         gap: 30px;
     }
 
-        .desktop-nav .nav-link {
+        .desktop-nav .nav-link,
+        .nav-link-dropdown {
             color: var(--foreground-secondary);
             font-weight: 700;
         }
 
-            .desktop-nav .nav-link:hover {
-                color: var(--accent);
-            }
-
-    .nav-link-dropdown {
-        display: none;
-        font-weight: 500;
-        position: absolute;
-        background: var(--action-primary);
-        min-width: 150px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        z-index: 10;
-        border-radius: 10px;
-        padding: 0;
-    }
-
-    .desktop-nav li:nth-child(2):hover .nav-link-dropdown {
-        display: block;
-    }
-
-    .nav-link-dropdown li {
-        padding: 0.5rem 1rem 0.5rem 1rem;
-    }
-
-        .nav-link-dropdown li a {
-            color: var(--foreground-secondary);
+        .desktop-nav a:hover {
+            color: var(--accent);
         }
 
-            .nav-link-dropdown li a:hover {
-                /*    background: var(--accent);*/
-                border-left: 4px solid var(--accent);
-                color: var(--white);
-                width: 100%;
-                padding-left: 6px;
-                transition: all 0.3s ease;
-            }
+    .dropdown-menu[data-bs-popper] {
+        top: revert;
+        left: revert;
+    }
+
+    .dropdown-menu a:hover {
+        border-left: 4px solid var(--accent);
+        color: var(--foreground-secondary);
+        transition: all 0.3s ease;
+    }
 
     .theme-btn-desktop {
         position: relative;
@@ -788,10 +769,11 @@ footer {
     /* #HERO */
     .hero {
         text-align: left;
-        background-image: url(../Content/Images/background-hero2.jpg);
+        background-image: url(../Content/Images/background-hero1.jpg);
         width: 100%;
-        height: 580px;
+        height: 460px;
         background-size: 100%;
+        background-position: center;
     }
 
         .hero .container {
@@ -806,7 +788,7 @@ footer {
             gap: 30px;
         }
 
-        .hero .right {
+        .hero .left {
             position: relative;
             display: flex;
             justify-content: center;

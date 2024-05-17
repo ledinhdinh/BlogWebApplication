@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Menu>
+
+<!--
+	 [06/05/2024] - Updated - Translate menu from English to Vietnammese.
+	 [17/05/2024] - Updated - Get menu parent and menu child from database.
+-->
+<ul class="desktop-nav">
+	@foreach (var itemMenu in Model.ToList())
+	{
+		@if (@itemMenu.MenuLevel != 2)
+		{
+			<li>
+				@if (@itemMenu.MenuChildIndex == 1)
+				{
+					<a class="nav-link-dropdown dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">@itemMenu.MenuParentName</a>
+
+					<ul class="dropdown-menu">
+						@foreach (var itemMenuChild in Model)
+						{
+							<li>
+								@if (@itemMenu.MenuParentIndex == @itemMenuChild.MenuChildIndex)
+								{
+									<a class="dropdown-item" asp-controller="@itemMenu.Controller" asp-action="ViewIndex">@itemMenuChild.MenuChildName</a>
+								}
+							</li>
+						}
+					</ul>
+				}
+				else
+				{
+					<a class="nav-link" asp-controller="@itemMenu.Controller" asp-action="ViewIndex">@itemMenu.MenuParentName</a>
+				}
+			</li>
+		}
+	}
+</ul>
+
+
+<button class="theme-btn theme-btn-desktop light">
+	<ion-icon class="moon" name="moon"></ion-icon>
+	<ion-icon name="sunny" class="sun"> </ion-icon>
+</button>
