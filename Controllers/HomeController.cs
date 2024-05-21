@@ -32,7 +32,7 @@ namespace BlogWebApplication.Controllers
 										 Text = objCategory.CategoryName,
 										 Value = objCategory.CategoryID.ToString()
 									 }).ToList();
-			return View(category);
+			return View(model: category);
 		}
 
 		public IActionResult Privacy()

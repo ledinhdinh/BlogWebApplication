@@ -1,11 +1,13 @@
-﻿@model IEnumerable<Menu>
+﻿@using BlogWebApplication.Models
+
+@model IEnumerable<Menu>
 
 <!--
 	 [06/05/2024] - Updated - Translate menu from English to Vietnammese.
 	 [17/05/2024] - Updated - Get menu parent and menu child from database.
 -->
 <ul class="desktop-nav">
-	@foreach (var itemMenu in Model.ToList())
+	@foreach (Menu itemMenu in Model)
 	{
 		@if (@itemMenu.MenuLevel != 2)
 		{
@@ -34,7 +36,6 @@
 		}
 	}
 </ul>
-
 
 <button class="theme-btn theme-btn-desktop light">
 	<ion-icon class="moon" name="moon"></ion-icon>

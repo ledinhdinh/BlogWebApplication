@@ -2,10 +2,6 @@
 using BlogWebApplication.Services;
 using BlogWebApplication.ViewModel;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace BlogWebApplication.Controllers
 {
@@ -34,6 +30,7 @@ namespace BlogWebApplication.Controllers
 			IEnumerable<Blog> listObjectBlog = (from objectBlog in _context.BlogWebs
 												select new Blog()
 												{
+													BlogID = objectBlog.BlogID,
 													BlogName = objectBlog.BlogName,
 													BlogDescription = objectBlog.BlogDescription,
 													ReadingTime = objectBlog.ReadingTime,
@@ -53,49 +50,106 @@ namespace BlogWebApplication.Controllers
 		/// <returns></returns>
 		/// <history>
 		///		[13/05/2024] - Create.
+		///		[19/05/2024] - Updated - LastModifyDate null if create new.
+		///		[21/05/2024] - Updated - Add case edit.
 		/// </history>
 		[HttpPost]
-		public ActionResult AddNewBlog(BlogViewModel blogViewModel)
+		public IActionResult AddNewBlog(BlogViewModel blogViewModel)
 		{
-			// save image file.
-			string newFileName = DateTime.Now.ToString("yyyyMMddmmmssfff");
-			if (blogViewModel.Image != null)
+			// 1. Add new.
+			if (blogViewModel.BlogID == 0)
 			{
-				newFileName += Path.GetExtension(blogViewModel.Image.FileName);
-				string imgFullPath = _environment.WebRootPath + "/images/" + newFileName;
-				using (var stream = System.IO.File.Create(imgFullPath))
+				// save image file.
+				string newFileName = DateTime.Now.ToString("yyyyMMddmmmssfff");
+				if (blogViewModel.Image != null)
 				{
-					blogViewModel.Image.CopyTo(stream);
+					newFileName += Path.GetExtension(blogViewModel.Image.FileName);
+					string imgFullPath = _environment.WebRootPath + "/images/" + newFileName;
+					using (var stream = System.IO.File.Create(imgFullPath))
+					{
+						blogViewModel.Image.CopyTo(stream);
+					}
 				}
+				else
+				{
+					newFileName = null;
+				}
+
+				Blog objectBlog = new Blog()
+				{
+					BlogName = blogViewModel.BlogName,
+					BlogDescription = blogViewModel.BlogDescription,
+					ReadingTime = blogViewModel.ReadingTime,
+					Author = blogViewModel.Author,
+					CategoryID = blogViewModel.CategoryID,
+					Link = blogViewModel.Link,
+					CreateDate = DateTime.Now,
+					Image = newFileName,
+				};
+				_context.BlogWebs.Add(objectBlog);
 			}
+			// 2. Edit.
 			else
 			{
-				newFileName = null;
+				Blog objectBlogEdit = _context.BlogWebs.Single(model => model.BlogID == blogViewModel.BlogID);
+				string newFileName = DateTime.Now.ToString("yyyyMMddmmmssfff");
+				if (blogViewModel.Image != null)
+				{
+					newFileName += Path.GetExtension(blogViewModel.Image.FileName);
+					string imgFullPath = _environment.WebRootPath + "/images/" + newFileName;
+					using (var stream = System.IO.File.Create(imgFullPath))
+					{
+						blogViewModel.Image.CopyTo(stream);
+					}
+					objectBlogEdit.Image = newFileName;
+				}
+				else
+				{
+					newFileName = null;
+				}
+
+				objectBlogEdit.BlogName = blogViewModel.BlogName;
+				objectBlogEdit.BlogDescription = blogViewModel.BlogDescription;
+				objectBlogEdit.ReadingTime = blogViewModel.ReadingTime;
+				objectBlogEdit.Author = blogViewModel.Author;
+				objectBlogEdit.CategoryID = blogViewModel.CategoryID;
+				objectBlogEdit.Link = blogViewModel.Link;
+				objectBlogEdit.LastDateModified = DateTime.Now;
+
 			}
-
-			Blog objectBlog = new Blog()
-			{
-				BlogName = blogViewModel.BlogName,
-				BlogDescription = blogViewModel.BlogDescription,
-				ReadingTime = blogViewModel.ReadingTime,
-				Author = blogViewModel.Author,
-				CategoryID = blogViewModel.CategoryID,
-				Link = blogViewModel.Link,
-				CreateDate = DateTime.Now,
-				LastDateModified = DateTime.Now,
-				Image = newFileName,
-			};
-
-			_context.BlogWebs.Add(objectBlog);
 			_context.SaveChanges();
-
-			//return Json(objectBlog);
-			return RedirectToAction("ViewHome", "Home");
+			return RedirectToAction("ViewIndex", "Home");
 		}
 
-		public IActionResult ViewIndex()
+		/// <summary>
+		///		Load detail data blog by BlogID.
+		/// </summary>
+		/// <returns></returns>
+		/// <history>
+		///		[17/05/2024] - Created
+		/// </history>
+		public IActionResult ViewIndex(int? id)
 		{
+			if (id != null)
+			{
+				Blog blog = _context.BlogWebs.Find(id);
+				return View(model: blog);
+			}
 			return View();
+		}
+
+		/// <summary>
+		///		Load data update, return modal add new.
+		/// </summary>
+		/// <returns></returns>
+		/// <history>
+		///		[19/05/2024] - Create.
+		/// </history>
+		[HttpGet]
+		public JsonResult UpdateBlog(int? blogID)
+		{
+			var result = _context.BlogWebs.Single(model => model.BlogID == blogID);
+			return Json(result);
 		}
 	}
 }

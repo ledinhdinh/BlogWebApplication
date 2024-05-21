@@ -16,12 +16,20 @@
 
   <ItemGroup>
     <Compile Remove="wwwroot\assets\**" />
+    <Compile Remove="wwwroot\ckeditor5\**" />
+    <Compile Remove="wwwroot\Ckeditor\**" />
     <Compile Remove="wwwroot\js\ckeditor\**" />
     <Content Remove="wwwroot\assets\**" />
+    <Content Remove="wwwroot\ckeditor5\**" />
+    <Content Remove="wwwroot\Ckeditor\**" />
     <Content Remove="wwwroot\js\ckeditor\**" />
     <EmbeddedResource Remove="wwwroot\assets\**" />
+    <EmbeddedResource Remove="wwwroot\ckeditor5\**" />
+    <EmbeddedResource Remove="wwwroot\Ckeditor\**" />
     <EmbeddedResource Remove="wwwroot\js\ckeditor\**" />
     <None Remove="wwwroot\assets\**" />
+    <None Remove="wwwroot\ckeditor5\**" />
+    <None Remove="wwwroot\Ckeditor\**" />
     <None Remove="wwwroot\js\ckeditor\**" />
   </ItemGroup>
 

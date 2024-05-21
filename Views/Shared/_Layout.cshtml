@@ -7,15 +7,14 @@
 	<!--- favicon-->
 	<link rel="shortcut icon" href="~/Content/Images/favicon.ico" type="images/x-icon">
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-	@* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
 	<link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
-	@* 	<link rel="stylesheet" href="~/BlogWebApplication.styles.css" asp-append-version="true" /> *@
+	<link href="~/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
 </head>
 <body class="light-theme">
 	<header>
 		<div class="container">
 			<nav class="navbar">
-				<a href="#">
+				<a asp-action="ViewIndex" asp-controller="Home">
 					<img src="~/Content/Images/logo-light.svg" alt="DevBlog's logo" width="150" class="logo-light">
 					<img src="~/Content/Images/logo-dark.svg" alt="DevBlog's logo" width="150" class="logo-dark">
 				</a>
@@ -88,16 +87,15 @@
 	</footer>
 
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	@* 	<script src="~/js/ckeditor/build/ckeditor.js"></script> *@
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-	@* <script src="~/js/site.js" asp-append-version="true"></script> *@
 	<!-- ionicon link-->
 	<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 	<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 	@* <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> *@
 	<!--Custom js link-->
-	<script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/super-build/ckeditor.js"></script>
 	<script src="~/js/script.js"></script>
+	@* js text editor *@
+	<script type="text/javascript" src="~/js/froala_editor.pkgd.min.js"></script>
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

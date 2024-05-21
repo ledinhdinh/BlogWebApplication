@@ -1,6 +1,11 @@
-﻿@model List<Blog>
+﻿@using BlogWebApplication.Models
 
-@foreach (var itemBlog in Model)
+@model List<Blog>
+
+@* [17/05/2024] - Updated - Edit link blog
+   [19/05/2024] - Updated - Add button update data.
+*@
+@foreach (Blog itemBlog in Model)
 {
 	<div class="blog-card">
 		<div class="blog-card-banner">
@@ -19,17 +24,23 @@
 		</div>
 
 		<div class="blog-content-wrapper">
-			<button class="blog-topic text-tiny">
-				@itemBlog.CategoryID
-			</button>
+			<div class="blog-content-title">
+				<button class="blog-topic text-tiny">
+					@itemBlog.CategoryID
+				</button>
+
+				<a title="Chỉnh sửa" id="btnUpdate" class="icon-edit" onclick="updateBlog(@itemBlog.BlogID);">
+					<ion-icon name="pencil-outline"></ion-icon>
+				</a>
+			</div>
 
 			<h3>
-				<a asp-action="ViewDetail" asp-controller="BlogWebs" class="h3">@itemBlog.BlogName</a>
+				@Html.ActionLink(@itemBlog.BlogName, "ViewIndex", "BlogWebs", new { id = itemBlog.BlogID }, new { @class = "h3" })
 			</h3>
 
 			<p class="blog-text">
 				<i>
-					Link: <a href="">@itemBlog.Link</a>
+					Link: <a href="@itemBlog.Link">@itemBlog.Link</a>
 				</i>
 			</p>
 
@@ -50,5 +61,6 @@
 				</p>
 			</div>
 		</div>
+
 	</div>
 }
