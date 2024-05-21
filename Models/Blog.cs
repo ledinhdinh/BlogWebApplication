@@ -18,6 +18,6 @@ namespace BlogWebApplication.Models
 		public string? Image { get; set; }
 		public string CategoryID { get; set; }
 		public DateTime CreateDate { get; set; }
-		public DateTime LastDateModified { get; set; }
+		public DateTime? LastDateModified { get; set; }
 	}
 }

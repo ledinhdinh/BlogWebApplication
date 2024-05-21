@@ -8,6 +8,7 @@
 
 @* [18/05/2024] - Create - Load view detail.
    [20/05/2024] - Updated - Use @Html.Raw display content.
+   [21/05/2024] - Updated - Format LastDateModified.
 *@
 <div class="container">
 	<div style="text-align:center">
@@ -15,7 +16,7 @@
 		<div class="information d-flex justify-content-around mt-3">
 			<h6>Tác giả: @Model.Author</h6>
 			<h6>Ngày tạo: @Model.CreateDate.ToString("dd/MM/yyyy")</h6>
-			<h6>Cập nhật: @Model.LastDateModified.ToString("dd/MM/yyyy")</h6>
+			<h6>Cập nhật: @Model.LastDateModified.Value.ToString("dd/MM/yyyy")</h6>
 		</div>
 		<p>
 			<div class="card mb-2">
