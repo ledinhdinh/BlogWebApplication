@@ -157,9 +157,16 @@ html {
     font-size: var(--fs-5);
 }
 
+.alert {
+    color: white;
+    background-color: #6BBF59;
+    border-color: #badbcc;
+    transform: translateX(370%);
+    width: 20rem;
+    font-weight: 500;
+}
 
 /* #REUSED STYLE */
-
 .container {
     margin-inline: auto;
     margin: auto;

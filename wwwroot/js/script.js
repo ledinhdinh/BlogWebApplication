@@ -18,7 +18,17 @@ $(document).ready(function () {
         },
         placeholderText: ''
     });
+
 });
+
+/**
+ * [23/05/2024] - Create - Set time out turn off message.
+ */
+window.setTimeout(function () {
+    $(".alert").fadeTo(500, 0).slideUp(500, function () {
+        $(this).remove();
+    });
+}, 3000);
 
 /**
  * Navbar variables
@@ -89,7 +99,7 @@ function loadBlog() {
         processType: false,
         url: '/BlogWebs/GetBlog',
         success: function (data) {
-            $("#loadBlog").html(data);
+            $("#loadBlog").html(data)
         },
         error: function () {
             alert('Something went wrong at load data Blog!');

@@ -3,6 +3,13 @@
 @model BlogWebApplication.ViewModel.BlogViewModel
 @{
 	ViewData["Title"] = "Home";
+	if (TempData.Peek("StatusMessage") != null)
+	{
+		<div class="alert">
+			<ion-icon name="checkmark-outline"></ion-icon>
+			@TempData.Peek("StatusMessage")
+		</div>
+	}
 }
 
 @* Load body of Home View
@@ -144,7 +151,7 @@
 												<div class="row mb-3">
 													@* Mô tả *@
 													@* [14/05/2024] - Updated - Add style editor.
-													[21/05/2024] - Updated - Use Froala for text editor.*@
+												[21/05/2024] - Updated - Use Froala for text editor.*@
 													<div class="col-md-12">
 														<div class="row">
 															<label class="col-sm-2 col-form-label">Mô tả </label>

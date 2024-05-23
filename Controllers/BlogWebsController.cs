@@ -9,6 +9,9 @@ namespace BlogWebApplication.Controllers
 	{
 		private readonly ApplicationDbContext _context;
 		private readonly IWebHostEnvironment _environment;
+		[TempData]
+		public string StatusMessage { get; set; }
+		public static string flagAction = string.Empty;
 
 		public BlogWebsController(ApplicationDbContext context, IWebHostEnvironment environment)
 		{
@@ -52,9 +55,10 @@ namespace BlogWebApplication.Controllers
 		///		[13/05/2024] - Create.
 		///		[19/05/2024] - Updated - LastModifyDate null if create new.
 		///		[21/05/2024] - Updated - Add case edit.
+		///		[23/05/2024] - Updated - Use TempData send notify message.
 		/// </history>
 		[HttpPost]
-		public IActionResult AddNewBlog(BlogViewModel blogViewModel)
+		public async Task<IActionResult> AddNewBlog(BlogViewModel blogViewModel)
 		{
 			// 1. Add new.
 			if (blogViewModel.BlogID == 0)
@@ -87,6 +91,7 @@ namespace BlogWebApplication.Controllers
 					Image = newFileName,
 				};
 				_context.BlogWebs.Add(objectBlog);
+				flagAction = "thêm mới";
 			}
 			// 2. Edit.
 			else
@@ -115,9 +120,10 @@ namespace BlogWebApplication.Controllers
 				objectBlogEdit.CategoryID = blogViewModel.CategoryID;
 				objectBlogEdit.Link = blogViewModel.Link;
 				objectBlogEdit.LastDateModified = DateTime.Now;
-
+				flagAction = "cập nhật";
 			}
 			_context.SaveChanges();
+			StatusMessage = $"Đã {flagAction} bài viết thành công ! ";
 			return RedirectToAction("ViewIndex", "Home");
 		}
 
