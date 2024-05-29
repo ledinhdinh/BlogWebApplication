@@ -56,29 +56,30 @@ namespace BlogWebApplication.Controllers
 		///		[19/05/2024] - Updated - LastModifyDate null if create new.
 		///		[21/05/2024] - Updated - Add case edit.
 		///		[23/05/2024] - Updated - Use TempData send notify message.
+		///		[29/05/2024] - Updated - Clean save image.
 		/// </history>
 		[HttpPost]
 		public async Task<IActionResult> AddNewBlog(BlogViewModel blogViewModel)
 		{
+			// save image file.
+			string newFileName = DateTime.Now.ToString("yyyyMMddmmmssfff");
+			if (blogViewModel.Image != null)
+			{
+				newFileName += Path.GetExtension(blogViewModel.Image.FileName);
+				string imgFullPath = _environment.WebRootPath + "/images/" + newFileName;
+				using (var stream = System.IO.File.Create(imgFullPath))
+				{
+					blogViewModel.Image.CopyTo(stream);
+				}
+			}
+			else
+			{
+				newFileName = null;
+			}
+
 			// 1. Add new.
 			if (blogViewModel.BlogID == 0)
 			{
-				// save image file.
-				string newFileName = DateTime.Now.ToString("yyyyMMddmmmssfff");
-				if (blogViewModel.Image != null)
-				{
-					newFileName += Path.GetExtension(blogViewModel.Image.FileName);
-					string imgFullPath = _environment.WebRootPath + "/images/" + newFileName;
-					using (var stream = System.IO.File.Create(imgFullPath))
-					{
-						blogViewModel.Image.CopyTo(stream);
-					}
-				}
-				else
-				{
-					newFileName = null;
-				}
-
 				Blog objectBlog = new Blog()
 				{
 					BlogName = blogViewModel.BlogName,
@@ -97,22 +98,6 @@ namespace BlogWebApplication.Controllers
 			else
 			{
 				Blog objectBlogEdit = _context.BlogWebs.Single(model => model.BlogID == blogViewModel.BlogID);
-				string newFileName = DateTime.Now.ToString("yyyyMMddmmmssfff");
-				if (blogViewModel.Image != null)
-				{
-					newFileName += Path.GetExtension(blogViewModel.Image.FileName);
-					string imgFullPath = _environment.WebRootPath + "/images/" + newFileName;
-					using (var stream = System.IO.File.Create(imgFullPath))
-					{
-						blogViewModel.Image.CopyTo(stream);
-					}
-					objectBlogEdit.Image = newFileName;
-				}
-				else
-				{
-					newFileName = null;
-				}
-
 				objectBlogEdit.BlogName = blogViewModel.BlogName;
 				objectBlogEdit.BlogDescription = blogViewModel.BlogDescription;
 				objectBlogEdit.ReadingTime = blogViewModel.ReadingTime;
