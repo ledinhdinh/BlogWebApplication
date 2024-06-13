@@ -46,21 +46,16 @@
 
 			<div class="wrapper-flex">
 				<div class="profile-wrapper">
-					<img src="~/Content/Images/author_default.jpg" alt="DinhDinh" width="50">
+					<img src="~/Content/Images/author_default.jpg" alt="Author-Image" width="50">
+				</div>
+
+				<div class="wrapper">
+					<a href="#" class="h4">@itemBlog.Author</a>
+					<span class="text-sm">
+						<time>@itemBlog.CreateDate.ToString("dd/MM/yyyy")</time>
+					</span>
 				</div>
 			</div>
-
-			<div class="wrapper">
-				<a href="#" class="h4">@itemBlog.Author</a>
-
-				<p class="text-sm">
-					<time datetime="2022-01-17">@itemBlog.CreateDate.ToString("dd/MM/yyyy")</time>
-					<span class="separator"></span>
-					<ion-icon name="time-outline"></ion-icon>
-					<time datetime="PT3M">@itemBlog.ReadingTime min</time>
-				</p>
-			</div>
 		</div>
-
 	</div>
 }

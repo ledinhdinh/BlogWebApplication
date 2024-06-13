@@ -457,14 +457,8 @@ header .btn-group {
         color: var(--accent);
     }
 
-.blog .text-sm {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    color: var(--foreground-tertiary);
-}
-
-.blog .separator {
+/*.blog*/
+.separator {
     background: var(--foreground-tertiary);
     margin-inline: 3px;
     margin: 0 3px;

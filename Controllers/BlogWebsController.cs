@@ -2,6 +2,7 @@
 using BlogWebApplication.Services;
 using BlogWebApplication.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BlogWebApplication.Controllers
 {
@@ -18,7 +19,7 @@ namespace BlogWebApplication.Controllers
 			this._context = context;
 			this._environment = environment;
 		}
-
+		
 		/// <summary>
 		///		Get detail data and return partial view.
 		/// </summary>
@@ -26,6 +27,7 @@ namespace BlogWebApplication.Controllers
 		/// <history>
 		///		[14/05/2024] - Create  - Get data for view detail.
 		///		[15/05/2024] - Updated - Change way get data to get image null.
+		///		[11/06/2024] - Updated - Remove column ReadingTime.
 		/// </history>
 		[HttpGet]
 		public PartialViewResult GetBlog(BlogViewModel blogViewModel)
@@ -36,7 +38,6 @@ namespace BlogWebApplication.Controllers
 													BlogID = objectBlog.BlogID,
 													BlogName = objectBlog.BlogName,
 													BlogDescription = objectBlog.BlogDescription,
-													ReadingTime = objectBlog.ReadingTime,
 													Image = string.IsNullOrEmpty(objectBlog.Image) ? null : objectBlog.Image,
 													CategoryID = objectBlog.CategoryID,
 													Link = string.IsNullOrEmpty(objectBlog.Link) ? null : objectBlog.Link,
@@ -56,6 +57,7 @@ namespace BlogWebApplication.Controllers
 		///		[19/05/2024] - Updated - LastModifyDate null if create new.
 		///		[21/05/2024] - Updated - Add case edit.
 		///		[23/05/2024] - Updated - Use TempData send notify message.
+		///		[11/06/2024] - Updated - Remove column ReadingTime.
 		/// </history>
 		[HttpPost]
 		public async Task<IActionResult> AddNewBlog(BlogViewModel blogViewModel)
@@ -64,9 +66,10 @@ namespace BlogWebApplication.Controllers
 			if (blogViewModel.BlogID == 0)
 			{
 				// save image file.
-				string newFileName = DateTime.Now.ToString("yyyyMMddmmmssfff");
+				string newFileName = null;
 				if (blogViewModel.Image != null)
 				{
+					newFileName = DateTime.Now.ToString("yyyyMMddmmmssfff");
 					newFileName += Path.GetExtension(blogViewModel.Image.FileName);
 					string imgFullPath = _environment.WebRootPath + "/images/" + newFileName;
 					using (var stream = System.IO.File.Create(imgFullPath))
@@ -74,16 +77,11 @@ namespace BlogWebApplication.Controllers
 						blogViewModel.Image.CopyTo(stream);
 					}
 				}
-				else
-				{
-					newFileName = null;
-				}
 
 				Blog objectBlog = new Blog()
 				{
 					BlogName = blogViewModel.BlogName,
 					BlogDescription = blogViewModel.BlogDescription,
-					ReadingTime = blogViewModel.ReadingTime,
 					Author = blogViewModel.Author,
 					CategoryID = blogViewModel.CategoryID,
 					Link = blogViewModel.Link,
@@ -97,29 +95,26 @@ namespace BlogWebApplication.Controllers
 			else
 			{
 				Blog objectBlogEdit = _context.BlogWebs.Single(model => model.BlogID == blogViewModel.BlogID);
-				string newFileName = DateTime.Now.ToString("yyyyMMddmmmssfff");
+
+				string newFileName = null;
 				if (blogViewModel.Image != null)
 				{
+					newFileName = DateTime.Now.ToString("yyyyMMddmmmssfff");
 					newFileName += Path.GetExtension(blogViewModel.Image.FileName);
 					string imgFullPath = _environment.WebRootPath + "/images/" + newFileName;
 					using (var stream = System.IO.File.Create(imgFullPath))
 					{
 						blogViewModel.Image.CopyTo(stream);
 					}
-					objectBlogEdit.Image = newFileName;
-				}
-				else
-				{
-					newFileName = null;
 				}
 
 				objectBlogEdit.BlogName = blogViewModel.BlogName;
 				objectBlogEdit.BlogDescription = blogViewModel.BlogDescription;
-				objectBlogEdit.ReadingTime = blogViewModel.ReadingTime;
 				objectBlogEdit.Author = blogViewModel.Author;
 				objectBlogEdit.CategoryID = blogViewModel.CategoryID;
 				objectBlogEdit.Link = blogViewModel.Link;
 				objectBlogEdit.LastDateModified = DateTime.Now;
+				objectBlogEdit.Image = newFileName;
 				flagAction = "cập nhật";
 			}
 			_context.SaveChanges();

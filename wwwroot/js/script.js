@@ -1,34 +1,37 @@
 ﻿'use strict';
+
+/**
+* [23/05/2024] - Create - Set time out turn off message.
+*/
 $(document).ready(function () {
     loadBlog();
+
     var editor = new FroalaEditor('#myEditor', {
-        toolbarButtons: {
-            'moreText': {
-                'buttons': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'clearFormatting']
-            },
-            'moreParagraph': {
-                'buttons': ['alignLeft', 'alignCenter', 'formatOLSimple', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote']
-            },
-            'moreRich': {
-                'buttons': ['insertLink', 'insertImage', 'insertVideo', 'insertTable', 'emoticons', 'fontAwesome', 'specialCharacters', 'embedly', 'insertFile', 'insertHR']
-            },
-            'moreMisc': {
-                'buttons': ['undo', 'redo', 'fullscreen', 'print', 'getPDF', 'spellChecker', 'selectAll', 'html', 'help']
-            }
-        },
+        //toolbarButtons: {
+        //    'moreText': {
+        //        'buttons': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'clearFormatting']
+        //    },
+        //    'moreParagraph': {
+        //        'buttons': ['alignLeft', 'alignCenter', 'formatOLSimple', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote']
+        //    },
+        //    'moreRich': {
+        //        'buttons': ['insertLink', 'insertImage', 'insertVideo', 'insertTable', 'emoticons', 'fontAwesome', 'specialCharacters', 'embedly', 'insertFile', 'insertHR']
+        //    },
+        //    'moreMisc': {
+        //        'buttons': ['undo', 'redo', 'fullscreen', 'print', 'getPDF', 'spellChecker', 'selectAll', 'html', 'help']
+        //    }
+        //},
         placeholderText: ''
     });
 
-});
+    setTimeout(function () {
+        $(".alert").fadeTo(500, 0).slideUp(500, function () {
+            $(this).remove();
+        });
+    }, 3000);
 
-/**
- * [23/05/2024] - Create - Set time out turn off message.
- */
-window.setTimeout(function () {
-    $(".alert").fadeTo(500, 0).slideUp(500, function () {
-        $(this).remove();
-    });
-}, 3000);
+    readingTime();
+});
 
 /**
  * Navbar variables
@@ -82,7 +85,6 @@ function resetValue() {
     $("#BlogName").val("");
     $("#Author").val("");
     $("#CategoryID").val("");
-    $("#ReadingTime").val("");
     $("#Link").val("");
 }
 
@@ -130,7 +132,6 @@ function updateBlog(blogID) {
             $('#BlogID').val(data.blogID);
             $('#BlogName').val(data.blogName);
             $('#Author').val(data.author);
-            $('#ReadingTime').val(data.readingTime);
             $('#CategoryID').val(data.categoryID);
             $('#Link').val(data.link);
             if (data.image == null) {
@@ -138,7 +139,6 @@ function updateBlog(blogID) {
             } else {
                 $("#previewImage").attr('src', "../images/" + data.image);
             }
-            /*  $('#myEditor').val(data.blogDescription);*/
 
             const element = document.getElementById("DataBlogDescription");
             element.innerHTML = data.blogDescription;
@@ -147,4 +147,15 @@ function updateBlog(blogID) {
             alert('Something went wrong at updated data Blog!');
         }
     });
+}
+
+/**
+ * [11/06/2024] - Create - Caculate word into reading time.
+ */
+function readingTime() {
+    const wpm = 200;
+    const text = $('#article').text();
+    const words = text.trim().split(/\s+/).length;
+    const time = Math.ceil(words / wpm);
+    document.getElementById("time").innerText = time + " phút đọc";
 }

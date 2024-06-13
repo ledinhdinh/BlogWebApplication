@@ -13,15 +13,25 @@
 <div class="container">
 	<div style="text-align:center">
 		<h1>@Model.BlogName</h1>
-		<div class="information d-flex justify-content-around mt-3">
+		<div class="information d-flex justify-content-between mt-3">
 			<h6>Tác giả: @Model.Author</h6>
-			<h6>Ngày tạo: @Model.CreateDate.ToString("dd/MM/yyyy")</h6>
-			<h6>Cập nhật: @Model.LastDateModified.Value.ToString("dd/MM/yyyy")</h6>
+			<time>Ngày đăng: @Model.CreateDate.ToString("dd/MM/yyyy")</time>
+			@if (@Model.LastDateModified != null)
+			{
+				<time>Cập nhật: @Model.LastDateModified.Value.ToString("dd/MM/yyyy")</time>
+			}
+			<div class="time" style="display: flex;align-items: center;">
+				<span class="separator"></span>
+				<ion-icon name="time-outline"></ion-icon>
+				<time id="time"></time>
+			</div>
 		</div>
 		<p>
 			<div class="card mb-2">
 				<div class="card-body">
-					@Html.Raw(@Model.BlogDescription)
+					<article id="article">
+						@Html.Raw(@Model.BlogDescription)
+					</article>
 				</div>
 			</div>
 		</p>

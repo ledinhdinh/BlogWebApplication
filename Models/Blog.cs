@@ -11,8 +11,6 @@ namespace BlogWebApplication.Models
 		public string BlogName { get; set; }
 		public string BlogDescription { get; set; }
 		[MaxLength(100)]
-		public string? ReadingTime { get; set; }
-		[MaxLength(100)]
 		public string? Author { get; set; }
 		public string? Link { get; set; }
 		public string? Image { get; set; }

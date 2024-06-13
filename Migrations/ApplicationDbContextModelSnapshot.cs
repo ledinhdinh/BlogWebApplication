@@ -59,10 +59,6 @@ namespace BlogWebApplication.Migrations
                     b.Property<string>("Link")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ReadingTime")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.HasKey("BlogID");
 
                     b.ToTable("BlogWebs");
