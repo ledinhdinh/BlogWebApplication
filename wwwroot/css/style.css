@@ -491,6 +491,9 @@ header .btn-group {
 /* #FOOTER */
 footer {
     background: var(--background-primary);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 
     footer .container {
