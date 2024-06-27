@@ -239,6 +239,14 @@ header {
         display: none;
     }
 
+/* [27/06/2024] - Updated - Add style hold header when scroll.*/
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index:1000;
+}
+
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -491,9 +499,6 @@ header .btn-group {
 /* #FOOTER */
 footer {
     background: var(--background-primary);
-    position: fixed;
-    bottom: 0;
-    width: 100%;
 }
 
     footer .container {
@@ -676,8 +681,6 @@ footer {
     .container {
         max-width: 800px;
     }
-
-    B
 }
 
 /* Responsive for larger than 1024px screen 

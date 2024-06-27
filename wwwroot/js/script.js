@@ -1,8 +1,8 @@
 ﻿'use strict';
 
 /**
-* [23/05/2024] - Create - Set time out turn off message.
-*/
+ * @since [23/05/2024] - Create - Set time out turn off message.
+ */
 $(document).ready(function () {
     loadBlog();
 
@@ -31,6 +31,21 @@ $(document).ready(function () {
     }, 3000);
 
     readingTime();
+
+    /**
+     * @since [27/06/2024] - Create - Hold header when scroll down.
+     */
+    window.onscroll = function () { myFunction() };
+
+    var header = document.querySelector("header");
+    var sticky = header.offsetTop;
+    function myFunction() {
+        if (window.pageYOffset > sticky) {
+            header.classList.add("sticky");
+        } else {
+            header.classList.remove("sticky");
+        }
+    }
 });
 
 /**
@@ -65,9 +80,10 @@ for (let i = 0; i < themeBtn.length; i++) {
     })
 }
 
-/*
-[13/05/2024] - Create - Display image when upload.
-*/
+/**
+ * @since [13/05/2024] - Create - Display image when upload.
+ * @param {any} result
+ */
 function displayImage(result) {
     if (result.files && result.files[0]) {
         var fileReader = new FileReader;
@@ -89,8 +105,8 @@ function resetValue() {
 }
 
 /**
-* [14/05/2024] - Created - load data.
-*/
+ * @since [14/05/2024] - Created - load data.
+ */
 function loadBlog() {
     $.ajax({
         async: true,
@@ -110,9 +126,9 @@ function loadBlog() {
 }
 
 /**
- * [19/05/2024] - Create
- * [21/05/2024] - Updated - Add element id to load data when edit.
- *                        - Check image null.
+ * @since [19/05/2024] - Create
+ * @since [21/05/2024] - Updated - Add element id to load data when edit.
+ *                               - Check image null.
  */
 function updateBlog(blogID) {
     /*Tìm thẻ p chứa blogDescription và set id để load data khi edit*/
@@ -150,12 +166,15 @@ function updateBlog(blogID) {
 }
 
 /**
- * [11/06/2024] - Create - Caculate word into reading time.
+ * @since [11/06/2024] - Create - Caculate word into reading time.
+ * @since [27/06/2024] - Updated - Check null if there isn't value text.
  */
 function readingTime() {
     const wpm = 200;
     const text = $('#article').text();
     const words = text.trim().split(/\s+/).length;
     const time = Math.ceil(words / wpm);
-    document.getElementById("time").innerText = time + " phút đọc";
+    if (text != "") {
+        document.getElementById("time").innerText = time + " phút đọc";
+    }
 }
