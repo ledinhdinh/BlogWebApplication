@@ -9,15 +9,15 @@
 {
 	<div class="blog-card">
 		<div class="blog-card-banner">
-			@if (@itemBlog.Image == null)
+			@if (@itemBlog.CoverImage == null)
 			{
-				<img src="/images/default_imageblog.jpg"
+				<img src="/ImagesBlog/default_imageblog.jpg"
 					 alt="Image-BlogTitle" width="250px"
 					 class="blog-banner-img">
 			}
 			else
 			{
-				<img src="/images/@itemBlog.Image"
+				<img src="/ImagesBlog/@itemBlog.CoverImage"
 					 alt="Image-BlogTitle" width="250px"
 					 class="blog-banner-img">
 			}

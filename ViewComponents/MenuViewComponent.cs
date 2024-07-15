@@ -1,5 +1,4 @@
-﻿using BlogWebApplication.Models;
-using BlogWebApplication.Services;
+﻿using BlogWebApplication.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogWebApplication.ViewComponents

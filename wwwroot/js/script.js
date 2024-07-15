@@ -2,6 +2,7 @@
 
 /**
  * @since [23/05/2024] - Create - Set time out turn off message.
+ * @since [04/07/2024] - Update - Change function declare -> function expression to imporve performance.
  */
 $(document).ready(function () {
     loadBlog();
@@ -28,10 +29,9 @@ $(document).ready(function () {
         $(".alert").fadeTo(500, 0).slideUp(500, function () {
             $(this).remove();
         });
-    }, 3000);
+    }, 3500);
 
     readingTime();
-
     /**
      * @since [27/06/2024] - Create - Hold header when scroll down.
      */
@@ -39,69 +39,111 @@ $(document).ready(function () {
 
     var header = document.querySelector("header");
     var sticky = header.offsetTop;
-    function myFunction() {
+    var myFunction = function () {
         if (window.pageYOffset > sticky) {
             header.classList.add("sticky");
         } else {
             header.classList.remove("sticky");
         }
     }
+
+    /**
+     * Navbar variables
+     */
+    const nav = document.querySelector('.mobile-nav');
+    const navMenuBtn = document.querySelector('.nav-menu-btn');
+    const navCloseBtn = document.querySelector('.nav-close-btn');
+
+    /**
+     * navToogle function.
+     */
+    const navToogleFunc = function () {
+        nav.classList.toggle('active');
+    }
+
+    navMenuBtn.addEventListener('click', navToogleFunc);
+    navCloseBtn.addEventListener('click', navToogleFunc);
+
+    /** theme toogle variables. */
+    const themeBtn = document.querySelectorAll('.theme-btn');
+
+    for (let i = 0; i < themeBtn.length; i++) {
+        themeBtn[i].addEventListener('click', function () {
+            document.body.classList.toggle('light-theme');
+            document.body.classList.toggle('dark-theme');
+
+            for (let i = 0; i < themeBtn.length; i++) {
+                themeBtn[i].classList.toggle('light');
+                themeBtn[i].classList.toggle('dark');
+            }
+        });
+    }
 });
 
 /**
- * Navbar variables
+ * @since [09/07/2024] - Create - Add function add attribute image.
+ * @param {any} dataReceive
+ * flagAction 0: default, 1: add new, 2: update.
  */
-const nav = document.querySelector('.mobile-nav');
-const navMenuBtn = document.querySelector('.nav-menu-btn');
-const navCloseBtn = document.querySelector('.nav-close-btn');
+function addAttributeCoverImage(dataReceive, flagAction) {
+    let attributeImage = document.querySelector("#previewImage");
 
-/**
- * navToogle function.
- */
-const navToogleFunc = function () {
-    nav.classList.toggle('active');
-}
+    attributeImage.setAttribute('height', "250px");
+    attributeImage.setAttribute('width', "250px");
+    attributeImage.setAttribute('style', "border:1px solid #ced4da; border-radius: .25rem");
 
-navMenuBtn.addEventListener('click', navToogleFunc);
-navCloseBtn.addEventListener('click', navToogleFunc);
-
-/** theme toogle variables. */
-const themeBtn = document.querySelectorAll('.theme-btn');
-
-for (let i = 0; i < themeBtn.length; i++) {
-    themeBtn[i].addEventListener('click', function () {
-        document.body.classList.toggle('light-theme');
-        document.body.classList.toggle('dark-theme');
-
-        for (let i = 0; i < themeBtn.length; i++) {
-            themeBtn[i].classList.toggle('light');
-            themeBtn[i].classList.toggle('dark');
-        }
-    })
+    switch (flagAction) {
+        case 1:
+            attributeImage.setAttribute('src', dataReceive.target.result);
+            break;
+        case 2:
+            attributeImage.setAttribute('src', "../ImagesBlog/" + dataReceive);
+            break;
+        default:
+            attributeImage.setAttribute('src', "../ImagesBlog/default_imageblog.jpg");
+            break;
+    }
 }
 
 /**
  * @since [13/05/2024] - Create - Display image when upload.
+ * @since [07/07/2024] - Updated - Add attribute image Blog.
  * @param {any} result
  */
-function displayImage(result) {
+var displayImage = function (result) {
     if (result.files && result.files[0]) {
-        var fileReader = new FileReader;
+        let fileReader = new FileReader();
         fileReader.onload = function (e) {
-            $("#previewImage").attr('src', e.target.result);
+            addAttributeCoverImage(e, 1);
         }
         fileReader.readAsDataURL(result.files[0]);
     }
 }
 
-function resetValue() {
-    $('#Image').val("");
-    var image = document.getElementById("previewImage");
-    image.removeAttribute("src", '../images/');
+/**
+ * @since [07/07/2024] - Updated - Remove attribute img Blog.
+ */
+var resetValue = function () {
+    let attributeImage = document.querySelector("#previewImage");
+    let elementBlogDescription = document.getElementsByTagName('p')[4];
+
+    if (attributeImage != ((null) || (""))) {
+        attributeImage.removeAttribute('src');
+        attributeImage.removeAttribute('height');
+        attributeImage.removeAttribute('width');
+        attributeImage.removeAttribute('style');
+    }
+
+    if (elementBlogDescription != (null)) {
+        elementBlogDescription.innerHTML = "";
+    }
+
     $("#BlogName").val("");
+    $("#Image").val("");
     $("#Author").val("");
     $("#CategoryID").val("");
     $("#Link").val("");
+    $("#CoverImage").val("");
 }
 
 /**
@@ -117,7 +159,7 @@ function loadBlog() {
         processType: false,
         url: '/BlogWebs/GetBlog',
         success: function (data) {
-            $("#loadBlog").html(data)
+            $("#loadBlog").html(data);
         },
         error: function () {
             alert('Something went wrong at load data Blog!');
@@ -129,11 +171,11 @@ function loadBlog() {
  * @since [19/05/2024] - Create
  * @since [21/05/2024] - Updated - Add element id to load data when edit.
  *                               - Check image null.
+ * @since [07/07/2024] - Updates - Set attribute img.
+ * @since [13/07/2024] - Updates - Remove id = "dataBlogDescription".
+ * @param {any} blogID
  */
-function updateBlog(blogID) {
-    /*Tìm thẻ p chứa blogDescription và set id để load data khi edit*/
-    var para = document.getElementsByTagName('p')[4];
-    para.id = "DataBlogDescription";
+var updateBlog = function (blogID) {
     $.ajax({
         async: true,
         cache: false,
@@ -150,17 +192,22 @@ function updateBlog(blogID) {
             $('#Author').val(data.author);
             $('#CategoryID').val(data.categoryID);
             $('#Link').val(data.link);
-            if (data.image == null) {
-                $("#previewImage").attr('src', "../images/default_imageblog.jpg");
-            } else {
-                $("#previewImage").attr('src', "../images/" + data.image);
+
+            /* Tìm thẻ p chứa blogDescription và set id để load data khi edit. */
+            if (data.blogDescription != null) {
+                let para = document.getElementsByTagName('p')[4];
+                para.innerHTML = data.blogDescription;
             }
 
-            const element = document.getElementById("DataBlogDescription");
-            element.innerHTML = data.blogDescription;
+            if (data.coverImage != null) {
+                addAttributeCoverImage(data.coverImage, 2);
+            }
+            else {
+                addAttributeCoverImage(null, 0);
+            }
         },
         error: function (errormessage) {
-            alert('Something went wrong at updated data Blog!');
+            alert('Something went wrong at updated data Blog !');
         }
     });
 }
@@ -170,10 +217,10 @@ function updateBlog(blogID) {
  * @since [27/06/2024] - Updated - Check null if there isn't value text.
  */
 function readingTime() {
-    const wpm = 200;
-    const text = $('#article').text();
-    const words = text.trim().split(/\s+/).length;
-    const time = Math.ceil(words / wpm);
+    let wpm = 200;
+    let text = $('#article').text();
+    let words = text.trim().split(/\s+/).length;
+    let time = Math.ceil(words / wpm);
     if (text != "") {
         document.getElementById("time").innerText = time + " phút đọc";
     }

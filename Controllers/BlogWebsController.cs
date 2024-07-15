@@ -2,7 +2,6 @@
 using BlogWebApplication.Services;
 using BlogWebApplication.ViewModel;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace BlogWebApplication.Controllers
 {
@@ -10,19 +9,24 @@ namespace BlogWebApplication.Controllers
 	{
 		private readonly ApplicationDbContext _context;
 		private readonly IWebHostEnvironment _environment;
+
 		[TempData]
 		public string StatusMessage { get; set; }
-		public static string flagAction = string.Empty;
+		public static string flagAction, flagStatus = string.Empty;
 
 		public BlogWebsController(ApplicationDbContext context, IWebHostEnvironment environment)
 		{
 			this._context = context;
 			this._environment = environment;
 		}
-		
+
+		// Create object.
+		Blog objectBlog = new Blog();
+
 		/// <summary>
 		///		Get detail data and return partial view.
 		/// </summary>
+		/// <param name="blogViewModel"></param>
 		/// <returns></returns>
 		/// <history>
 		///		[14/05/2024] - Create  - Get data for view detail.
@@ -38,7 +42,7 @@ namespace BlogWebApplication.Controllers
 													BlogID = objectBlog.BlogID,
 													BlogName = objectBlog.BlogName,
 													BlogDescription = objectBlog.BlogDescription,
-													Image = string.IsNullOrEmpty(objectBlog.Image) ? null : objectBlog.Image,
+													CoverImage = string.IsNullOrEmpty(objectBlog.CoverImage) ? null : objectBlog.CoverImage,
 													CategoryID = objectBlog.CategoryID,
 													Link = string.IsNullOrEmpty(objectBlog.Link) ? null : objectBlog.Link,
 													Author = string.IsNullOrEmpty(objectBlog.Author) ? null : objectBlog.Author,
@@ -58,83 +62,91 @@ namespace BlogWebApplication.Controllers
 		///		[21/05/2024] - Updated - Add case edit.
 		///		[23/05/2024] - Updated - Use TempData send notify message.
 		///		[11/06/2024] - Updated - Remove column ReadingTime.
+		///		[14/07/2024] - Updated - Clean code & add try catch.
 		/// </history>
 		[HttpPost]
 		public async Task<IActionResult> AddNewBlog(BlogViewModel blogViewModel)
 		{
-			// 1. Add new.
-			if (blogViewModel.BlogID == 0)
+			try
 			{
-				// save image file.
-				string newFileName = null;
-				if (blogViewModel.Image != null)
+				//string newFileName = DateTime.Now.ToString("yyyyMMddmmmssfff");
+				string newFileName = (blogViewModel.CoverImage != null) ? blogViewModel.CoverImage.FileName : null;
+				if (blogViewModel.CoverImage != null)
 				{
-					newFileName = DateTime.Now.ToString("yyyyMMddmmmssfff");
-					newFileName += Path.GetExtension(blogViewModel.Image.FileName);
-					string imgFullPath = _environment.WebRootPath + "/images/" + newFileName;
+					//newFileName += Path.GetExtension(blogViewModel.CoverImage.FileName);
+					string imgFullPath = _environment.WebRootPath + "/ImagesBlog/" + newFileName;
 					using (var stream = System.IO.File.Create(imgFullPath))
 					{
-						blogViewModel.Image.CopyTo(stream);
+						blogViewModel.CoverImage.CopyTo(stream);
+						stream.Dispose();
 					}
 				}
 
-				Blog objectBlog = new Blog()
+				// 1. Add new.
+				if (blogViewModel.BlogID == 0)
 				{
-					BlogName = blogViewModel.BlogName,
-					BlogDescription = blogViewModel.BlogDescription,
-					Author = blogViewModel.Author,
-					CategoryID = blogViewModel.CategoryID,
-					Link = blogViewModel.Link,
-					CreateDate = DateTime.Now,
-					Image = newFileName,
-				};
-				_context.BlogWebs.Add(objectBlog);
-				flagAction = "thêm mới";
-			}
-			// 2. Edit.
-			else
-			{
-				Blog objectBlogEdit = _context.BlogWebs.Single(model => model.BlogID == blogViewModel.BlogID);
+					objectBlog.BlogName = blogViewModel.BlogName;
+					objectBlog.BlogDescription = blogViewModel.BlogDescription;
+					objectBlog.Author = blogViewModel.Author;
+					objectBlog.CategoryID = blogViewModel.CategoryID;
+					objectBlog.Link = blogViewModel.Link;
+					objectBlog.CreateDate = DateTime.Now;
+					objectBlog.CoverImage = newFileName;
 
-				string newFileName = null;
-				if (blogViewModel.Image != null)
-				{
-					newFileName = DateTime.Now.ToString("yyyyMMddmmmssfff");
-					newFileName += Path.GetExtension(blogViewModel.Image.FileName);
-					string imgFullPath = _environment.WebRootPath + "/images/" + newFileName;
-					using (var stream = System.IO.File.Create(imgFullPath))
-					{
-						blogViewModel.Image.CopyTo(stream);
-					}
+					_context.BlogWebs.Add(objectBlog);
+					flagAction = "thêm mới";
 				}
+				// 2. Edit.
+				else
+				{
+					objectBlog = _context.BlogWebs.Single(model => model.BlogID == blogViewModel.BlogID);
 
-				objectBlogEdit.BlogName = blogViewModel.BlogName;
-				objectBlogEdit.BlogDescription = blogViewModel.BlogDescription;
-				objectBlogEdit.Author = blogViewModel.Author;
-				objectBlogEdit.CategoryID = blogViewModel.CategoryID;
-				objectBlogEdit.Link = blogViewModel.Link;
-				objectBlogEdit.LastDateModified = DateTime.Now;
-				objectBlogEdit.Image = newFileName;
-				flagAction = "cập nhật";
+					if (string.IsNullOrEmpty(objectBlog.CoverImage))
+					{
+						objectBlog.CoverImage = newFileName;
+					}
+
+					objectBlog.BlogName = blogViewModel.BlogName;
+					objectBlog.BlogDescription = blogViewModel.BlogDescription;
+					objectBlog.Author = blogViewModel.Author;
+					objectBlog.CategoryID = blogViewModel.CategoryID;
+					objectBlog.Link = blogViewModel.Link;
+					objectBlog.LastDateModified = DateTime.Now;
+
+					flagAction = "cập nhật";
+				}
+				flagStatus = "thành công !";
+				_context.SaveChanges();
+				StatusMessage = $"Đã {flagAction} bài viết {flagStatus} ";
 			}
-			_context.SaveChanges();
-			StatusMessage = $"Đã {flagAction} bài viết thành công ! ";
+			catch (Exception error)
+			{
+				StatusMessage = "Đã có lỗi xảy ra !";
+			}
+			// Code trong khối này được thực thi ngay cả khi có phát sinh ngoại lệ hay không.
+			// Khối này cơ bản để giải phóng các tài nguyên chiếm giữ.
+			//finally
+			//{
+			//	StatusMessage = $"Đã {flagAction} bài viết {flagStatus} ";
+			//}
 			return RedirectToAction("ViewIndex", "Home");
 		}
 
 		/// <summary>
 		///		Load detail data blog by BlogID.
 		/// </summary>
+		/// <param name="id"></param>
 		/// <returns></returns>
 		/// <history>
 		///		[17/05/2024] - Created
 		/// </history>
+
 		public IActionResult ViewIndex(int? id)
 		{
-			if (id != null)
+			if (id.HasValue)
 			{
-				Blog blog = _context.BlogWebs.Find(id);
-				return View(model: blog);
+				objectBlog = _context.BlogWebs.Find(id);
+				return View(model: objectBlog);
 			}
 			return View();
 		}
@@ -142,6 +154,7 @@ namespace BlogWebApplication.Controllers
 		/// <summary>
 		///		Load data update, return modal add new.
 		/// </summary>
+		/// <param name="blogID"></param>
 		/// <returns></returns>
 		/// <history>
 		///		[19/05/2024] - Create.

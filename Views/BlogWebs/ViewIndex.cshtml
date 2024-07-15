@@ -1,5 +1,4 @@
 ﻿@using BlogWebApplication.Models
-
 @model BlogWebApplication.Models.Blog
 
 @{
@@ -16,7 +15,7 @@
 		<div class="information d-flex justify-content-between mt-3">
 			<h6>Tác giả: @Model.Author</h6>
 			<time>Ngày đăng: @Model.CreateDate.ToString("dd/MM/yyyy")</time>
-			@if (@Model.LastDateModified != null)
+			@if (@Model.LastDateModified.HasValue)
 			{
 				<time>Cập nhật: @Model.LastDateModified.Value.ToString("dd/MM/yyyy")</time>
 			}
@@ -37,3 +36,5 @@
 		</p>
 	</div>
 </div>
+
+
