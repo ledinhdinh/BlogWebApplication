@@ -12,6 +12,9 @@
 	}
 }
 
+<link type="text/css" href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+
 @* Load body of Home View
 	[06/05/2024] - Updated - Move class="img-box" to div tag.
 	[13/05/2024] - Updated - Hide temporary background.
@@ -98,12 +101,11 @@
 												</div>
 
 												<div class="row mb-3">
-													@* Loại *@
+													@* Loại bài viết *@
 													<div class="col-md-6">
 														<div class="row">
 															<label class="col-sm-4 col-form-label">Loại bài viết </label>
 															<div class="col-sm-8">
-																@* <input type="select" class="form-control" asp-for="CategoryID" /> *@
 																<select class="form-select" asp-for="CategoryID">
 																	@foreach (var item in Model.listCategory)
 																	{
@@ -124,7 +126,7 @@
 													</div>
 												</div>
 												<div class="row mb-3">
-													@* Hình ảnh *@
+													@* CoverImage *@
 													<div class="col-md-12">
 														<div class="row">
 															<label class="col-sm-2 col-form-label">Hình ảnh </label>
@@ -143,14 +145,15 @@
 													<div class="col-md-12">
 														<div class="row">
 															<label class="col-sm-2 col-form-label">Mô tả </label>
-															<div>
-																<textarea asp-for="BlogDescription" id="myEditor"></textarea>
+															<div id="richTextEditor">
 															</div>
+															<textarea asp-for="BlogDescription" style="display:none;"></textarea>
 														</div>
 													</div>
 												</div>
 											</div>
 										</div>
+
 										@* Footer modal *@
 										<div class="modal-footer">
 											<input type="button" onclick="resetValue();" data-bs-dismiss="modal" class="btn btn-danger" value="Đóng" />
@@ -159,7 +162,6 @@
 									</div>
 								</div>
 							</div>
-
 						</div>
 					}
 				</div>
@@ -169,8 +171,8 @@
 			<div class="blog-card-group">
 				<div id="loadBlog"></div>
 			</div>
-
 			<button class="btn load-more">Load More</button>
+
 		</div>
 
 		<!-- ASIDE -->
@@ -276,3 +278,44 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	@* 	const editor = new RichTextEditor("#richTextEditor");
+		console.log(editor); *@
+
+			const toolbarOptions = [
+		['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+		['blockquote', 'code-block'],
+		['link', 'image', 'video', 'formula'],
+
+		[{ 'header': 1 }, { 'header': 2 }],               // custom button values
+		[{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
+		[{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+		[{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+		[{ 'direction': 'rtl' }],                         // text direction
+
+		[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+		[{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+		[{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+		[{ 'font': [] }],
+		[{ 'align': [] }],
+
+		['clean']                                         // remove formatting button
+	];
+
+	const quill = new Quill('#richTextEditor', {
+		theme: 'snow',
+		modules: {
+			toolbar: toolbarOptions
+		}
+	});
+
+	//console.log(quill);
+
+	@* Bind dữ liệu từ text editor qua text area để lưu dữ liệu.  *@
+		quill.on('text-change', function (delta, oldDelta, source) {
+			console.log(quill.container.firstChild.innerHTML);
+			$('#BlogDescription').val(quill.container.firstChild.innerHTML);
+		});
+</script>

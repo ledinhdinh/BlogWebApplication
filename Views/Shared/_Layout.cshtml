@@ -8,7 +8,8 @@
 	<link rel="shortcut icon" href="~/Content/Images/favicon.ico" type="images/x-icon">
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
-	<link href="~/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
+	@* <link type="text/css" href="~/css/froala_editor.pkgd.min.css" rel="stylesheet" /> *@
+	@* <link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" /> *@
 </head>
 <body class="light-theme">
 	<header>
@@ -93,9 +94,10 @@
 	<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 	@* <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> *@
 	<!--Custom js link-->
-	<script src="~/js/script.js"></script>
+	<script type="text/javascript" src="~/js/script.js"></script>
 	@* js text editor *@
-	<script type="text/javascript" src="~/js/froala_editor.pkgd.min.js"></script>
+	@* <script type="text/javascript" src="~/js/froalatexteditor/froala_editor.pkgd.min.js"></script> *@
+	@* <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script> *@
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

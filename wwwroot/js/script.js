@@ -3,27 +3,28 @@
 /**
  * @since [23/05/2024] - Create - Set time out turn off message.
  * @since [04/07/2024] - Update - Change function declare -> function expression to imporve performance.
+ * Trong javascript quy tắc đặt tên function là camel case (viết thường chữ cái đầu, viết hoa chữ kế tiếp).
  */
 $(document).ready(function () {
     loadBlog();
-
-    var editor = new FroalaEditor('#myEditor', {
-        //toolbarButtons: {
-        //    'moreText': {
-        //        'buttons': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'clearFormatting']
-        //    },
-        //    'moreParagraph': {
-        //        'buttons': ['alignLeft', 'alignCenter', 'formatOLSimple', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote']
-        //    },
-        //    'moreRich': {
-        //        'buttons': ['insertLink', 'insertImage', 'insertVideo', 'insertTable', 'emoticons', 'fontAwesome', 'specialCharacters', 'embedly', 'insertFile', 'insertHR']
-        //    },
-        //    'moreMisc': {
-        //        'buttons': ['undo', 'redo', 'fullscreen', 'print', 'getPDF', 'spellChecker', 'selectAll', 'html', 'help']
-        //    }
-        //},
-        placeholderText: ''
-    });
+    //var editor = new FroalaEditor('#myEditor', {
+    //    //toolbarButtons: {
+    //    //    //'moreText': {
+    //    //    //    'buttons': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'clearFormatting']
+    //    //    //},
+    //    //    //'moreParagraph': {
+    //    //    //    'buttons': ['alignLeft', 'alignCenter', 'formatOLSimple', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote']
+    //    //    //},
+    //    //    'moreRich': {
+    //    //        'buttons': ['insertLink', 'insertImage', 'insertVideo', 'insertTable', 'emoticons', 'fontAwesome', 'specialCharacters', 'embedly', 'insertFile', 'insertHR']
+    //    //    }
+    //    //    //,
+    //    //    //'moreMisc': {
+    //    //    //    'buttons': ['undo', 'redo', 'fullscreen', 'print', 'getPDF', 'spellChecker', 'selectAll', 'html', 'help']
+    //    //    //}
+    //    //},
+    //    placeholderText: ''
+    //});
 
     setTimeout(function () {
         $(".alert").fadeTo(500, 0).slideUp(500, function () {
@@ -125,17 +126,12 @@ var displayImage = function (result) {
  */
 var resetValue = function () {
     let attributeImage = document.querySelector("#previewImage");
-    let elementBlogDescription = document.getElementsByTagName('p')[4];
 
-    if (attributeImage != ((null) || (""))) {
+    if (attributeImage != (null)) {
         attributeImage.removeAttribute('src');
         attributeImage.removeAttribute('height');
         attributeImage.removeAttribute('width');
         attributeImage.removeAttribute('style');
-    }
-
-    if (elementBlogDescription != (null)) {
-        elementBlogDescription.innerHTML = "";
     }
 
     $("#BlogName").val("");
@@ -144,6 +140,7 @@ var resetValue = function () {
     $("#CategoryID").val("");
     $("#Link").val("");
     $("#CoverImage").val("");
+    quill.container.children[0].innerHTML = "";
 }
 
 /**
@@ -193,18 +190,14 @@ var updateBlog = function (blogID) {
             $('#CategoryID').val(data.categoryID);
             $('#Link').val(data.link);
 
-            /* Tìm thẻ p chứa blogDescription và set id để load data khi edit. */
-            if (data.blogDescription != null) {
-                let para = document.getElementsByTagName('p')[4];
-                para.innerHTML = data.blogDescription;
-            }
-
             if (data.coverImage != null) {
                 addAttributeCoverImage(data.coverImage, 2);
             }
             else {
                 addAttributeCoverImage(null, 0);
             }
+
+            quill.container.children[0].innerHTML = data.blogDescription;
         },
         error: function (errormessage) {
             alert('Something went wrong at updated data Blog !');
