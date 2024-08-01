@@ -1,6 +1,9 @@
 ﻿@using BlogWebApplication.ViewModel
 @model BlogWebApplication.ViewModel.BlogViewModel
 
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" />
+
 @{
 	ViewData["Title"] = "Home";
 	if (TempData.Peek("StatusMessage") != null)
@@ -11,9 +14,6 @@
 		</div>
 	}
 }
-
-<link type="text/css" href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 
 @* Load body of Home View
 	[06/05/2024] - Updated - Move class="img-box" to div tag.
@@ -283,7 +283,7 @@
 	@* 	const editor = new RichTextEditor("#richTextEditor");
 		console.log(editor); *@
 
-			const toolbarOptions = [
+		const toolbarOptions = [
 		['bold', 'italic', 'underline', 'strike'],        // toggled buttons
 		['blockquote', 'code-block'],
 		['link', 'image', 'video', 'formula'],

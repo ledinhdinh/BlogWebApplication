@@ -10,29 +10,27 @@
    [21/05/2024] - Updated - Format LastDateModified.
 *@
 <div class="container">
-	<div style="text-align:center">
-		<h1>@Model.BlogName</h1>
-		<div class="information d-flex justify-content-between mt-3">
-			<h6>Tác giả: @Model.Author</h6>
-			<time>Ngày đăng: @Model.CreateDate.ToString("dd/MM/yyyy")</time>
-			@if (@Model.LastDateModified.HasValue)
-			{
-				<time>Cập nhật: @Model.LastDateModified.Value.ToString("dd/MM/yyyy")</time>
-			}
-			<div class="time" style="display: flex;align-items: center;">
-				<span class="separator"></span>
-				<ion-icon name="time-outline"></ion-icon>
-				<time id="time"></time>
+	<h1 style="text-align:center">@Model.BlogName</h1>
+	<div class="information d-flex justify-content-between mt-3">
+		<h6>Tác giả: @Model.Author</h6>
+		<time>Ngày đăng: @Model.CreateDate.ToString("dd/MM/yyyy")</time>
+		@if (@Model.LastDateModified.HasValue)
+		{
+			<time>Cập nhật: @Model.LastDateModified.Value.ToString("dd/MM/yyyy")</time>
+		}
+		<div class="time" style="display: flex;align-items: center;">
+			<span class="separator"></span>
+			<ion-icon name="time-outline"></ion-icon>
+			<time id="time"></time>
+		</div>
+	</div>
+	<p>
+		<div class="card mb-2">
+			<div class="card-body">
+				<article class="ql-editor" id="article">
+					@Html.Raw(@Model.BlogDescription)
+				</article>
 			</div>
 		</div>
-		<p>
-			<div class="card mb-2">
-				<div class="card-body">
-					<article id="article">
-						@Html.Raw(@Model.BlogDescription)
-					</article>
-				</div>
-			</div>
-		</p>
-	</div>
+	</p>
 </div>
